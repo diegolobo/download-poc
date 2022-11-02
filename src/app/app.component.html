@@ -384,7 +384,24 @@
       <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
     </a>
 
+    <a class="card" target="_blank" rel="noopener" href="https://angular.io/cli">
+      <span class="material-icons">file_download</span>
+      <span>Download</span>
+      <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </a>
+
   </div>
+
+  <mat-card>
+    <div class="file">
+      <p>{{ slides.name }}</p>
+      <button (click)="download(slides)" mat-raised-button color="primary">Download</button>
+    </div>
+    <mat-progress-bar *ngIf="download$ | async as download"
+      [mode]="download.state == 'PENDING' ? 'buffer' : 'determinate'"
+      [value]="download.progress">
+    </mat-progress-bar>
+  </mat-card>
 
   <!-- Next Steps -->
   <h2>Next Steps</h2>
