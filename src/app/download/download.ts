@@ -1,4 +1,5 @@
 import { HttpEvent, HttpEventType,  HttpProgressEvent,  HttpResponse } from "@angular/common/http";
+import { SelectMultipleControlValueAccessor } from "@angular/forms";
 import { Observable } from "rxjs";
 import { distinctUntilChanged, scan, map, tap } from "rxjs/operators";
 
@@ -16,7 +17,7 @@ function isHttpProgressEvent(  event: HttpEvent<unknown>): event is HttpProgress
 export interface Download {
   content: Blob | null;
   progress: number;
-  state: "PENDING" | "IN_PROGRESS" | "DONE";
+  state: "PENDING" | "IN_PROGRESS" | "DONE" | "ERROR";
 }
 
 export function download(  saver?: (b: Blob) => void): (source: Observable<HttpEvent<Blob>>) => Observable<Download> {
@@ -37,6 +38,7 @@ export function download(  saver?: (b: Blob) => void): (source: Observable<HttpE
             if (saver) {
               saver(event.body!);
             }
+
             return {
               progress: 100,
               state: "DONE",

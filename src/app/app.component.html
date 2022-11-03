@@ -397,10 +397,12 @@
       <p>{{ slides.name }}</p>
       <button (click)="download(slides)" mat-raised-button color="primary">Download</button>
     </div>
-    <mat-progress-bar *ngIf="download$ | async as download"
+    <ng-container *ngIf="download$ | async as download">
+      <mat-progress-bar *ngIf="download.state != 'ERROR' && download.state != 'DONE'"
       [mode]="download.state == 'PENDING' ? 'buffer' : 'determinate'"
       [value]="download.progress">
     </mat-progress-bar>
+    </ng-container>
   </mat-card>
 
   <!-- Next Steps -->

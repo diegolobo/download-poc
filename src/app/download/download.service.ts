@@ -1,8 +1,7 @@
 import { Injectable, Inject } from '@angular/core'
 import { HttpClient, HttpRequest } from '@angular/common/http'
 import { download, Download } from './download'
-import { map } from 'rxjs/operators'
-import { Observable } from 'rxjs'
+import { BehaviorSubject, catchError, Observable } from 'rxjs'
 import { SAVER, Saver } from './saver.provider'
 
 @Injectable({providedIn: 'root'})
@@ -19,7 +18,15 @@ export class DownloadService {
       reportProgress: true,
       observe: 'events',
       responseType: 'blob'
-    }).pipe(download(blob => this.save(blob, filename)))
+    }).pipe(
+      download(blob => this.save(blob, filename)),
+      catchError((error) => {
+        alert("Deu ruim 2!");//TODO: Implementar popup de erro
+        const downloadSubject: BehaviorSubject<Download> =
+        new BehaviorSubject<Download>({ progress: 0, state: "ERROR", content: null });
+        return downloadSubject.asObservable();
+      })
+      )
   }
 
   blob(url: string, filename?: string): Observable<Blob> {
